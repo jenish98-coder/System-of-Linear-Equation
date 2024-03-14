@@ -1,0 +1,66 @@
+#include <stdio.h>
+#include <math.h>
+
+int main() {
+    int n, i, j;
+    float el, k, E[10], a[10][10], nx[10], x[10], y[10];
+
+    printf("Enter Dimension of System of equations\n");
+    scanf("%d", &n);
+
+    printf("Enter coefficients row-wise\n");
+    for(i = 0; i < n; i++) {
+        for(j = 0; j < n; j++) {
+            scanf("%f", &a[i][j]);
+        }
+    }
+
+    printf("Enter guess vector\n");
+    for(i = 0; i < n; i++) {
+        scanf("%f", &x[i]);
+    }
+
+    printf("Enter Accuracy Limit\n");
+    scanf("%f", &el);
+
+    while(1) {
+        for (i = 0; i < n; i++) {
+            y[i] = 0;
+            for (j = 0; j < n; j++) {
+                y[i] += a[i][j] * x[j];
+            }
+        }
+
+        k = y[0];
+        for (i = 1; i < n; i++) {
+            if (k < y[i]) {
+                k = y[i];
+            }
+        }
+
+        for (i = 0; i < n; i++) {
+            nx[i] = y[i] / k;
+        }
+
+        for (i = 0; i < n; i++) {
+            E[i] = (nx[i] - x[i]) / nx[i];
+            if (E[i] > el) {
+                break;
+            }
+            if (i == n - 1) {
+                printf("Largest Eigenvalue is: %f\n", k);
+                printf("Eigenvector is:\n");
+                for (i = 0; i < n; i++) {
+                    printf("%f\t", nx[i]);
+                }
+                return 0;
+            }
+        }
+
+        for (i = 0; i < n; i++) {
+            x[i] = nx[i];
+        }
+    }
+
+    return 0;
+}
